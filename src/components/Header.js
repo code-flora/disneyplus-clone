@@ -8,7 +8,7 @@ function Header() {
     let items = useSelector(selectHeaderMenu);
     let menuList = items.map((item) => {
         return (
-            <a href={item.url}>
+            <a href={item.url} key={item.id}>
                 <img className="menu-icon" src={item.iconUrl} />
                 <span>{item.name}</span>
             </a>
@@ -35,7 +35,7 @@ const Nav = styled.nav`
     padding: 0 36px;
     height: 70px;
     background: #090b13;
-    color: white;
+    overflow-x: hidden;
 `
 
 const Logo = styled.img`
@@ -72,7 +72,7 @@ const NavMenu = styled.div`
                 left: 0;
                 right: 0;
                 bottom: -6px;
-                transform-origin: top center;
+                transform-origin: left center;
                 transform: scaleX(0);
                 opacity: 0;
                 transition: all 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;

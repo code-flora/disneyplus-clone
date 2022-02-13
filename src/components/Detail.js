@@ -145,10 +145,10 @@ const Description = styled.div`
     color: rgb(249,249,249);
 
     @media(max-width: 1400px){
-        width: 50vw;
+        width: 60vw;
     }
 
-    @media(max-width: 768px){
+    @media(max-width: 800px){
         width: 70vw;
     }
 

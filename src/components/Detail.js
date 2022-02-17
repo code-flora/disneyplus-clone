@@ -1,39 +1,63 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import db from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 function Detail() {
+    const { id } = useParams();
+    const [movie, setMovie] = useState();
+
+    useEffect(() => {
+        async function fetchData() {
+            // Grab movie info from DB
+            const docSnap = await getDoc(doc(db, "movies", id))
+            if (docSnap.data()) {
+                let data = { ...docSnap.data() };
+                setMovie(data);
+            } else {
+                // redirect to homepage
+            }
+        };
+        fetchData();
+    }, []) // [] dependency array, tells useeffect to trigger only when the dependency array changes
+
     return (
         <Container>
-            <Background>
-                <img src="/movies/startrek_bg.jpg" />
-            </Background>
-            <ImageTitle>
-                <img src="/movies/startrek_logo.jpg" />
-            </ImageTitle>
-            <Controls>
-                <PlayButton>
-                    <img src="/images/play-icon-black.png" /> <span>PLAY</span>
-                </PlayButton>
-                <TrailerButton>
-                    <img src="/images/play-icon-white.png" /> <span>TRAILER</span>
-                </TrailerButton>
-                <AddButton>
-                    <span>+</span>
-                </AddButton>
-                <GroupWatchButton>
-                    <img src="/images/group-icon.png" />
-                </GroupWatchButton>
-            </Controls>
-            <Subtitle>
-                <span>
-                    2009 ● 127m ● Sci-Fi Movies, US Movies, Action & Adventure
-                </span>
-            </Subtitle>
-            <Description>
-                <span>
-                    On their first voyage aboard the starship Enterprise, cocky rebel James T. Kirk and logic-driven Vulcan Spock try to defeat a vengeful Romulan commander.
-                </span>
-            </Description>
+            {movie && (
+                <>
+                    <Background>
+                        <img src={movie.bgImgUrl} alt="" />
+                    </Background>
+                    <ImageTitle>
+                        <img src={movie.logoUrl} alt={movie.name} />
+                    </ImageTitle>
+                    <Controls>
+                        <PlayButton>
+                            <img src="/images/play-icon-black.png" alt="" /> <span>PLAY</span>
+                        </PlayButton>
+                        <TrailerButton>
+                            <img src="/images/play-icon-white.png" alt="" /> <span>TRAILER</span>
+                        </TrailerButton>
+                        <AddButton>
+                            <span>+</span>
+                        </AddButton>
+                        <GroupWatchButton>
+                            <img src="/images/group-icon.png" alt="" />
+                        </GroupWatchButton>
+                    </Controls>
+                    <Subtitle>
+                        <span>
+                            {movie.year} ● {movie.duration} ● {movie.genre.join(', ')}
+                        </span>
+                    </Subtitle>
+                    <Description>
+                        <span>
+                            {movie.description}
+                        </span>
+                    </Description>
+                </>
+            )}
         </Container >
     )
 }
@@ -64,6 +88,7 @@ const Background = styled.div`
     }
 `
 const ImageTitle = styled.div`
+    margin-top: 70px;
     margin-bottom: 30px;
     height: 20vh;
     min-height: 170px;

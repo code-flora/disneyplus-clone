@@ -11,8 +11,8 @@ function ImgSlider() {
     let sliderContent = useSelector(selectSlider);
     let contentCode = sliderContent.map((elem) => {
         return (
-            <Wrap>
-                <img src={elem.imgUrl} key={elem.id} alt={elem.name} />
+            <Wrap key={elem.id}>
+                <img src={elem.imgUrl} alt={elem.name} />
             </Wrap>
         )
     });

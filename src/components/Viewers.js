@@ -7,8 +7,8 @@ function Viewers() {
     let viewersContent = useSelector(selectViewers);
     let viewersCode = viewersContent.map((item) => {
         return (
-            <Wrap>
-                <img src={item.imgUrl} alt={item.alt} key={item.id} />
+            <Wrap key={item.id}>
+                <img src={item.imgUrl} alt={item.alt} />
             </Wrap>
         )
     })

@@ -1,15 +1,56 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectHeaderMenu } from '../features/header/menuSlice';
+import { selectUserName, selectUserPhoto, setUserLogin, setUserSignOut } from '../features/user/userSlice';
+import { auth, provider } from '../firebase'
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
+    const dispatch = useDispatch();
+    const userName = useSelector(selectUserName);
+    const userPhoto = useSelector(selectUserPhoto);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                dispatch(setUserLogin({
+                    name: user.displayName,
+                    email: user.email,
+                    photo: user.photoURL
+                }))
+                navigate("/");
+            }
+        })
+    }, [])
+
+    const signIn = () => {
+        auth.signInWithPopup(provider)
+            .then((result) => {
+                let user = result.user;
+                dispatch(setUserLogin({
+                    name: user.displayName,
+                    email: user.email,
+                    photo: user.photoURL
+                }))
+                navigate("/");
+            })
+    }
+
+    const signOut = () => {
+        auth.signOut()
+            .then(() => {
+                dispatch(setUserSignOut());
+                navigate("/login");
+            })
+    }
 
     let items = useSelector(selectHeaderMenu);
     let menuList = items.map((item) => {
         return (
-            <a href={item.url} key={item.id}>
-                <img className="menu-icon" src={item.iconUrl} />
+            <a href={item.linkUrl} key={item.id}>
+                <img className="menu-icon" src={item.iconUrl} alt="" />
                 <span>{item.name}</span>
             </a>
         );
@@ -18,10 +59,18 @@ function Header() {
     return (
         <Nav>
             <Logo src="/images/logo.svg" />
-            <NavMenu>
-                {menuList}
-            </NavMenu>
-            <UserImg src="/images/Windows-Profile-Pic.jpg" />
+            {!userName ? (
+                <Login onClick={signIn}>Login</Login>) :
+                <>
+                    <NavMenu>
+                        {menuList}
+                    </NavMenu>
+
+                    <UserImg src={userPhoto} onClick={signOut} />
+                </>
+
+            }
+
         </Nav>
     )
 }
@@ -42,6 +91,23 @@ const Logo = styled.img`
     width: 80px;
 `
 
+const Login = styled.div`
+
+    padding: 6px 20px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    background-color: rgba(0,0,0,0.6);
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+
+    &:hover{
+        background-color: #f9f9f9;
+        color: black;
+        border-color: transparent;
+    }
+`
+
 const NavMenu = styled.div`
     display: flex;
     flex: 1;
@@ -59,6 +125,8 @@ const NavMenu = styled.div`
         align-items: center;
         padding: 0 14px;
         cursor: pointer;
+        text-decoration: none;
+        color: white;
 
         span {
             padding-left: 2px;

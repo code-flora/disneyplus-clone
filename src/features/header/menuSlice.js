@@ -6,7 +6,7 @@ const initialState = {
             id: 0,
             name: 'Home',
             iconUrl: '/images/home-icon.svg',
-            linkUrl: '/home'
+            linkUrl: '/'
         },
         {
             id: 1,

@@ -5,14 +5,14 @@ function Login() {
     return (
         <Container>
             <Content>
-                <CTALogoOne src="/images/cta-logo-one.svg" />
+                <CTALogoOne src="https://firebasestorage.googleapis.com/v0/b/disney-plus-clone-e2d5c.appspot.com/o/DisneyClone_Assets%2Flogin%2Fcta-logo-one.svg?alt=media&token=dabe42fb-3d07-4257-9688-f610c9d686e9" />
                 <SignUp>
                     GET ALL THERE
                 </SignUp>
                 <Description>
                     Get Premier Access to Raya and the last Dragon for an additional fee with a Disney+ subscription. As of 03/26/21, the price of Disney+ and The Disney Bundy will increase by $1.
                 </Description>
-                <CTALogoTwo src="/images/cta-logo-two.png" />
+                <CTALogoTwo src="https://firebasestorage.googleapis.com/v0/b/disney-plus-clone-e2d5c.appspot.com/o/DisneyClone_Assets%2Flogin%2Fcta-logo-two.png?alt=media&token=4f734a4e-41cc-47ee-84a5-d51107fa13c1" />
             </Content>
         </Container >
     )
@@ -29,7 +29,7 @@ const Container = styled.div`
 
     &:before{
         content: "";
-        background-image: url('/images/login-background.jpg');
+        background-image: url('https://firebasestorage.googleapis.com/v0/b/disney-plus-clone-e2d5c.appspot.com/o/DisneyClone_Assets%2Fgeneral%2Flogin-background.jpg?alt=media&token=b7d3ef4a-0b04-4998-ab7a-ee3afee2d57c');
         background-size: cover;
         background-repeat: no-repeat;
         position: absolute;

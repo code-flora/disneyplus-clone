@@ -42,7 +42,7 @@ const Container = styled.main`
     overflow-x: hidden;
     
     :before {
-        background: url("/images/home-background.png") center center / cover no-repeat fixed;
+        background: url("https://firebasestorage.googleapis.com/v0/b/disney-plus-clone-e2d5c.appspot.com/o/DisneyClone_Assets%2Fgeneral%2Fhome-background.png?alt=media&token=5590ed3b-d09b-4256-bf40-2bc98fc044df") center center / cover no-repeat fixed;
         content: "";
         position: absolute;
         top: 0;

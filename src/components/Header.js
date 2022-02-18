@@ -58,7 +58,7 @@ function Header() {
 
     return (
         <Nav>
-            <Logo src="/images/logo.svg" />
+            <Logo src="https://firebasestorage.googleapis.com/v0/b/disney-plus-clone-e2d5c.appspot.com/o/DisneyClone_Assets%2Fgeneral%2Flogo.svg?alt=media&token=f35382de-6475-4e68-bfa1-90690ba9ce23" />
             {!userName ? (
                 <Login onClick={signIn}>Login</Login>) :
                 <>

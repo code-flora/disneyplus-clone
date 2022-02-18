@@ -34,16 +34,16 @@ function Detail() {
                     </ImageTitle>
                     <Controls>
                         <PlayButton>
-                            <img src="/images/play-icon-black.png" alt="" /> <span>PLAY</span>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/disney-plus-clone-e2d5c.appspot.com/o/DisneyClone_Assets%2Fgeneral%2Fplay-icon-black.png?alt=media&token=12e7b74e-bf81-482c-80de-9ec7f46c3ed1" alt="" /> <span>PLAY</span>
                         </PlayButton>
                         <TrailerButton>
-                            <img src="/images/play-icon-white.png" alt="" /> <span>TRAILER</span>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/disney-plus-clone-e2d5c.appspot.com/o/DisneyClone_Assets%2Fgeneral%2Fplay-icon-white.png?alt=media&token=6cfacd2a-f028-4230-b62c-13943c2d592b" alt="" /> <span>TRAILER</span>
                         </TrailerButton>
                         <AddButton>
                             <span>+</span>
                         </AddButton>
                         <GroupWatchButton>
-                            <img src="/images/group-icon.png" alt="" />
+                            <img src="https://firebasestorage.googleapis.com/v0/b/disney-plus-clone-e2d5c.appspot.com/o/DisneyClone_Assets%2Fgeneral%2Fgroup-icon.png?alt=media&token=edc64bca-bb34-4516-a7d2-b2e75e02049c" alt="" />
                         </GroupWatchButton>
                     </Controls>
                     <Subtitle>

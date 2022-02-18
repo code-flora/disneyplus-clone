@@ -6,12 +6,13 @@ import "slick-carousel/slick/slick-theme.css";
 import { useSelector } from 'react-redux';
 import { selectViewers } from '../features/home/viewersSlice';
 import HoverVideoPlayer from 'react-hover-video-player';
+import MediaQuery from 'react-responsive';
 
 function Viewers() {
     let viewersContent = useSelector(selectViewers);
     let viewersCode = viewersContent.map((item) => {
         return (
-            <Wrap key={item.id}>
+            <Wrap key={item.id} className="carousel">
                 <HoverVideoPlayer
                     videoSrc={item.vidUrl}
                     style={{
@@ -35,16 +36,55 @@ function Viewers() {
         )
     })
 
+    const settings = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        autoplay: false
+    };
+
+    const settings2 = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 2,
+        slidesToScroll: 1,
+        autoplay: false
+    };
+
     return (
-        <Container>
-            {viewersCode}
-        </Container>
+        <MediaWrapper>
+            <MediaQuery minWidth={1001}>
+                <ContainerGrid>
+                    {viewersCode}
+                </ContainerGrid>
+            </MediaQuery>
+
+            <MediaQuery minWidth={601} maxWidth={1000}>
+                <Carousel {...settings}>
+                    {viewersCode}
+                </Carousel>
+            </MediaQuery>
+
+            <MediaQuery maxWidth={600}>
+                <Carousel {...settings2}>
+                    {viewersCode}
+                </Carousel>
+            </MediaQuery>
+
+        </MediaWrapper>
+
+
+
     )
 }
 
 export default Viewers
+const MediaWrapper = styled.div``;
 
-const Container = styled.div`
+const ContainerGrid = styled.div`
     margin-top: 30px;
     padding: 30px 0 26px;
     display: grid;
@@ -74,6 +114,17 @@ const Wrap = styled.div`
         transform: scale(1.05);
         border-color: rgba(249,249,249,0.6);
     }
-
    
+`
+const Carousel = styled(Slider)`
+    margin-top: 40px;
+
+    .slick-list {
+        overflow: visible;
+    }
+
+    .carousel {
+        width: 250px;
+    }
+
 `

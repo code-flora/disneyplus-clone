@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux';
 import { selectHeaderMenu } from '../features/header/menuSlice';
 import { selectUserName, selectUserPhoto, setUserLogin, setUserSignOut } from '../features/user/userSlice';
 import { auth, provider } from '../firebase'
 import { useNavigate } from 'react-router-dom';
+import MediaQuery from 'react-responsive';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import { fabClasses } from '@mui/material';
 
 function Header() {
     const dispatch = useDispatch();
@@ -56,20 +60,48 @@ function Header() {
         );
     })
 
+    const [menuOpen, setMenu] = useState(false);
+
     return (
         <Nav>
             <Logo src="https://firebasestorage.googleapis.com/v0/b/disney-plus-clone-e2d5c.appspot.com/o/DisneyClone_Assets%2Fgeneral%2Flogo.svg?alt=media&token=f35382de-6475-4e68-bfa1-90690ba9ce23" />
-            {!userName ? (
-                <Login onClick={signIn}>Login</Login>) :
-                <>
-                    <NavMenu>
-                        {menuList}
-                    </NavMenu>
 
-                    <UserImg src={userPhoto} onClick={signOut} />
-                </>
+            <MediaQuery minWidth={1000}>
 
-            }
+                {!userName ? (
+                    <Login onClick={signIn}>Login</Login>) :
+                    <>
+                        <NavMenu>
+                            {menuList}
+                        </NavMenu>
+
+                        <UserImg src={userPhoto} onClick={signOut} />
+                    </>
+
+                }
+            </MediaQuery>
+
+            <MediaQuery maxWidth={999}>
+
+                {!userName ? (
+                    <Login onClick={signIn}>Login</Login>) :
+                    <>
+                        <Wrapper>
+                            <UserImg src={userPhoto} onClick={signOut} />
+                            {!menuOpen ? <BurgerMenuIcon onClick={() => setMenu(!menuOpen)} /> : <CloseMenuIcon onClick={() => setMenu(!menuOpen)} />}
+                        </Wrapper>
+
+                        {menuOpen ? (<NavToggleMenu >
+                            {menuList}
+                        </NavToggleMenu>) : ""}
+
+
+
+                    </>
+
+                }
+
+            </MediaQuery>
 
         </Nav>
     )
@@ -85,6 +117,11 @@ const Nav = styled.nav`
     height: 70px;
     background: #090b13;
     overflow-x: hidden;
+`
+
+const Wrapper = styled.div`
+    display: flex;
+    align-items: center;
 `
 
 const Logo = styled.img`
@@ -155,9 +192,34 @@ const NavMenu = styled.div`
         }
     }
 `
+
+const NavToggleMenu = styled(NavMenu)`
+    position: absolute;
+    width: 100%;
+    top: 70px;
+    right: 0;
+    padding: 20px 5px;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    background-color: rgba(0,0,0,0.7);
+    
+
+    a{
+        margin-bottom: 10px;
+    }
+`
 const UserImg = styled.img`
     width: 48px;
     height: 48px;
     border-radius: 50%;
+    cursor: pointer;
+`
+const BurgerMenuIcon = styled(MenuIcon)`
+    margin-left: 10px;
+    cursor: pointer;
+`
+const CloseMenuIcon = styled(CloseIcon)`
+    margin-left: 10px;
     cursor: pointer;
 `

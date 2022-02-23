@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Home from './components/Home';
 import Detail from './components/Detail';
 import Login from './components/Login';
+import Watchlist from './components/Watchlist'
 import {
   BrowserRouter as Router,
   Routes,
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/watchlist" element={<Watchlist />} />
           <Route path="/" element={<Home />} />
 
         </Routes>

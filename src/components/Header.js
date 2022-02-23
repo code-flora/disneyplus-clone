@@ -21,9 +21,10 @@ function Header() {
                 dispatch(setUserLogin({
                     name: user.displayName,
                     email: user.email,
-                    photo: user.photoURL
+                    photo: user.photoURL,
+                    uid: user.uid
                 }))
-                navigate("/");
+                // navigate("/");
             }
         })
     }, [])

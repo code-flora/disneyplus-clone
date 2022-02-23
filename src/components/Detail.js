@@ -4,11 +4,29 @@ import { useParams, useNavigate } from 'react-router-dom';
 import db from '../firebase';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 
 function Detail() {
     const { id } = useParams();
     const [movie, setMovie] = useState();
     let navigate = useNavigate();
+    const [open, setOpen] = React.useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState("");
+
+    //SNACKBAR integration
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
 
     useEffect(() => {
         async function fetchData() {
@@ -52,9 +70,15 @@ function Detail() {
                         await updateDoc(userRef, {
                             watchList: arrayUnion(tinyMovieData)
                         })
+                        setOpen(true);
+                        setSnackbarMessage("Movie added to your watch list!");
+                        setSnackbarSeverity("success")
                     } else {
                         // Add notification that it is already in the list
                         console.log("Movie is already in the Watch List")
+                        setOpen(true);
+                        setSnackbarMessage("Movie is already in your watch list.")
+                        setSnackbarSeverity("info")
                     }
 
 
@@ -64,6 +88,7 @@ function Detail() {
             }
         })
     }
+
 
 
     return (
@@ -104,6 +129,11 @@ function Detail() {
                             {movie.description}
                         </span>
                     </Description>
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+                            {snackbarMessage}
+                        </Alert>
+                    </Snackbar>
                 </>
             )}
         </Container >

@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { selectUserId } from '../features/user/userSlice';
 import { useParams, useNavigate } from 'react-router-dom';
 import db from '../firebase';
-import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import AddIcon from '@mui/icons-material/Add';
+import DoneIcon from '@mui/icons-material/Done';
 
 
 function Detail() {
@@ -13,8 +17,10 @@ function Detail() {
     const [movie, setMovie] = useState();
     let navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState("");
-    const [snackbarSeverity, setSnackbarSeverity] = useState("");
+    const [snackbarMessage, setSnackbarMessage] = useState("Movie added to your watch list!");
+    const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+    const [addedToList, setAddedToList] = useState(false)
+    let userId = useSelector(selectUserId);
 
     //SNACKBAR integration
     const Alert = React.forwardRef(function Alert(props, ref) {
@@ -38,58 +44,59 @@ function Detail() {
             } else {
                 // redirect to homepage
             }
+
+            let docCheck = await getDoc(doc(db, "users", userId));
+            let currentWatchList = docCheck.data().watchList.map((movie) => movie.movieId);
+
+            if (currentWatchList.includes(id)) {
+                setAddedToList(true)
+            }
         };
         fetchData();
     }, []) // [] dependency array, tells useeffect to trigger only when the dependency array changes
 
-    function addToWatchlist() {
-        //1. User logged in?
-        const auth = getAuth();
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                let userId = user.uid
-                let docSnap = await getDoc(doc(db, "users", userId));
-                let userRef = doc(db, "users", userId);
-                let tinyMovieData = {
-                    name: movie.name,
-                    thumbnailUrl: movie.thumbnailUrl,
-                    movieId: id
-                }
-
-                if (!docSnap.data()) {
-                    await setDoc(userRef, {
-                        watchList: [{ ...tinyMovieData }]
-                    })
-                } else {
-                    //if user.watchlist.movieId does not include current id, then add to list.
-
-                    let currentWatchList = docSnap.data().watchList.map((movie) => movie.movieId);
-
-                    if (!currentWatchList.includes(id)) {
-                        // Add notification that it is added
-                        await updateDoc(userRef, {
-                            watchList: arrayUnion(tinyMovieData)
-                        })
-                        setOpen(true);
-                        setSnackbarMessage("Movie added to your watch list!");
-                        setSnackbarSeverity("success")
-                    } else {
-                        // Add notification that it is already in the list
-                        console.log("Movie is already in the Watch List")
-                        setOpen(true);
-                        setSnackbarMessage("Movie is already in your watch list.")
-                        setSnackbarSeverity("info")
-                    }
-
-
-                }
-            } else {
-                navigate("/login");
+    async function addToWatchlist() {
+        //1. User logged in? if logged in:
+        if (userId) {
+            let docSnap = await getDoc(doc(db, "users", userId));
+            let userRef = doc(db, "users", userId);
+            let tinyMovieData = {
+                name: movie.name,
+                thumbnailUrl: movie.thumbnailUrl,
+                movieId: id
             }
-        })
+            // if no data in "users" db, add user and current movie data
+            if (!docSnap.data()) {
+                await setDoc(userRef, {
+                    watchList: [{ ...tinyMovieData }]
+                })
+            } else {
+                //if user exists in "users" db
+                if (!addedToList) {
+                    // If movie is not in current watch list, add to list. Add notification that it is added
+                    await updateDoc(userRef, {
+                        watchList: arrayUnion(tinyMovieData)
+                    })
+                    setOpen(true);
+                    setSnackbarMessage("Movie added to your watch list!");
+                    setSnackbarSeverity("success");
+                    setAddedToList(true);
+                } else {
+                    // If movie IS in current watch list, change function to delete from watch list. Add notification that it is deleted
+                    await updateDoc(userRef, {
+                        watchList: arrayRemove(tinyMovieData)
+                    })
+                    setOpen(true);
+                    setSnackbarMessage("Movie is removed from your watch list.")
+                    setSnackbarSeverity("info")
+                    setAddedToList(false);
+                }
+            }
+        } else {
+            //1. if user not logged in
+            navigate("/login");
+        }
     }
-
-
 
     return (
         <Container>
@@ -111,10 +118,9 @@ function Detail() {
                             </TrailerButton>
                         </RowWrap>
                         <RowWrap>
-                            <AddButton onClick={addToWatchlist}>
-                                <span>+</span>
-                            </AddButton>
-                            <GroupWatchButton>
+                            <AddButton onClick={addToWatchlist} addedToList={addedToList} >
+                                {addedToList ? <DoneIcon /> : <AddIcon />}
+                            </AddButton>                           <GroupWatchButton>
                                 <img src="https://firebasestorage.googleapis.com/v0/b/disney-plus-clone-e2d5c.appspot.com/o/DisneyClone_Assets%2Fgeneral%2Fgroup-icon.png?alt=media&token=edc64bca-bb34-4516-a7d2-b2e75e02049c" alt="" />
                             </GroupWatchButton>
                         </RowWrap>
@@ -228,19 +234,32 @@ const AddButton = styled.button`
     width: 40px;
     border-radius: 50%;
     background-color: rgba(0,0,0,0.3);
+    ${({ addedToList }) => addedToList == true && 'background-color: rgba(249,249,249,0.9);'}
     border: 1px solid rgb(249,249,249);
+    color: white;
+    ${({ addedToList }) => addedToList == true && 'color: black;'}
     cursor: pointer;
-
-    span {
-        font-size: 28px;
-        color: white;
+    
+    svg {
+        height: 1.2em;
+        width: 1.2em;
     }
+
 
 `
 
-const GroupWatchButton = styled(AddButton)`
+const GroupWatchButton = styled.button`
+margin-right: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
     background-color: rgb(0,0,0);
-
+    color: white;
+    border: 1px solid rgb(249,249,249);
+    cursor: pointer;
 `
 
 const Subtitle = styled.div`

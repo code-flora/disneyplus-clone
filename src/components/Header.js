@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import MediaQuery from 'react-responsive';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import { fabClasses } from '@mui/material';
 
 function Header() {
     const dispatch = useDispatch();
@@ -38,7 +37,7 @@ function Header() {
                     email: user.email,
                     photo: user.photoURL
                 }))
-                navigate("/");
+                navigate(-2);
             })
     }
 

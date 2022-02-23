@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import db from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function Detail() {
     const { id } = useParams();
     const [movie, setMovie] = useState();
+    let navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {
@@ -21,6 +23,48 @@ function Detail() {
         };
         fetchData();
     }, []) // [] dependency array, tells useeffect to trigger only when the dependency array changes
+
+    function addToWatchlist() {
+        //1. User logged in?
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                let userId = user.uid
+                let docSnap = await getDoc(doc(db, "users", userId));
+                let userRef = doc(db, "users", userId);
+                let tinyMovieData = {
+                    name: movie.name,
+                    thumbnailUrl: movie.thumbnailUrl,
+                    movieId: id
+                }
+
+                if (!docSnap.data()) {
+                    await setDoc(userRef, {
+                        watchList: [{ ...tinyMovieData }]
+                    })
+                } else {
+                    //if user.watchlist.movieId does not include current id, then add to list.
+
+                    let currentWatchList = docSnap.data().watchList.map((movie) => movie.movieId);
+
+                    if (!currentWatchList.includes(id)) {
+                        // Add notification that it is added
+                        await updateDoc(userRef, {
+                            watchList: arrayUnion(tinyMovieData)
+                        })
+                    } else {
+                        // Add notification that it is already in the list
+                        console.log("Movie is already in the Watch List")
+                    }
+
+
+                }
+            } else {
+                navigate("/login");
+            }
+        })
+    }
+
 
     return (
         <Container>
@@ -42,7 +86,7 @@ function Detail() {
                             </TrailerButton>
                         </RowWrap>
                         <RowWrap>
-                            <AddButton>
+                            <AddButton onClick={addToWatchlist}>
                                 <span>+</span>
                             </AddButton>
                             <GroupWatchButton>

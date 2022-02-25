@@ -5,7 +5,6 @@ import { selectUserId } from '../features/user/userSlice';
 import { useParams, useNavigate } from 'react-router-dom';
 import db from '../firebase';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import AddIcon from '@mui/icons-material/Add';
@@ -13,14 +12,16 @@ import DoneIcon from '@mui/icons-material/Done';
 
 
 function Detail() {
-    const { id } = useParams();
+    //creating states
     const [movie, setMovie] = useState();
-    let navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("Movie added to your watch list!");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
     const [addedToList, setAddedToList] = useState(false)
+    //other variables
+    let navigate = useNavigate();
     let userId = useSelector(selectUserId);
+    const { id } = useParams();
 
     //SNACKBAR integration
     const Alert = React.forwardRef(function Alert(props, ref) {

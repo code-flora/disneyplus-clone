@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { selectSlider } from '../features/home/sliderSlice';
 
 function ImgSlider() {
-
+    //get data from redux store, mapping them to JSX code
     let sliderContent = useSelector(selectSlider);
     let contentCode = sliderContent.map((elem) => {
         return (
@@ -16,7 +16,7 @@ function ImgSlider() {
             </Wrap>
         )
     });
-
+    //initialize slider settings
     const settings = {
         dots: true,
         infinite: true,
@@ -56,7 +56,6 @@ const Carousel = styled(Slider)`
     button {
         z-index: 1;
     }
-
 `
 const Wrap = styled.div`
     cursor: pointer;
@@ -71,6 +70,5 @@ const Wrap = styled.div`
         :hover {
             border: 4px solid rgba(249, 249, 249, 0.8);
         }
-
     }
 `

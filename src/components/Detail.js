@@ -43,7 +43,7 @@ function Detail() {
                 let data = { ...docSnap.data() };
                 setMovie(data);
             } else {
-                // redirect to homepage
+                navigate('/')// redirect to homepage
             }
 
             let docCheck = await getDoc(doc(db, "users", userId));
@@ -245,8 +245,6 @@ const AddButton = styled.button`
         height: 1.2em;
         width: 1.2em;
     }
-
-
 `
 
 const GroupWatchButton = styled.button`

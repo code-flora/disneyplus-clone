@@ -13,25 +13,27 @@ function Viewers() {
     let viewersCode = viewersContent.map((item) => {
         return (
             <Wrap key={item.id} className="carousel">
-                <HoverVideoPlayer
-                    videoSrc={item.vidUrl}
-                    style={{
-                        width: '100%',
-                        paddingTop: '56.25%',
-                    }}
-                    restartOnPaused={true}
-                    unloadVideoOnPaused={true}
-                    sizingMode="container"
-                    pausedOverlay={
-                        <img src={item.imgUrl} alt={item.alt}
-                        />
-                    }
-                    hoverOverlay={
-                        <img src={item.imgUrl} alt={item.alt}
-                        />
-                    }
-                    overlayTransitionDuration={500}
-                />
+                <a href={item.url}>
+                    <HoverVideoPlayer
+                        videoSrc={item.vidUrl}
+                        style={{
+                            width: '100%',
+                            paddingTop: '56.25%',
+                        }}
+                        restartOnPaused={true}
+                        unloadVideoOnPaused={true}
+                        sizingMode="container"
+                        pausedOverlay={
+                            <img src={item.imgUrl} alt={item.alt}
+                            />
+                        }
+                        hoverOverlay={
+                            <img src={item.imgUrl} alt={item.alt}
+                            />
+                        }
+                        overlayTransitionDuration={500}
+                    />
+                </a>
             </Wrap>
         )
     })
@@ -73,11 +75,7 @@ function Viewers() {
                     {viewersCode}
                 </Carousel>
             </MediaQuery>
-
         </MediaWrapper>
-
-
-
     )
 }
 
@@ -90,7 +88,6 @@ const ContainerGrid = styled.div`
     display: grid;
     grid-gap: 25px;
     grid-template-columns: repeat(5, minmax(0, 1fr))
-    
 ;`
 
 const Wrap = styled.div`
@@ -114,7 +111,6 @@ const Wrap = styled.div`
         transform: scale(1.05);
         border-color: rgba(249,249,249,0.6);
     }
-   
 `
 const Carousel = styled(Slider)`
     margin-top: 40px;
@@ -126,5 +122,4 @@ const Carousel = styled(Slider)`
     .carousel {
         width: 250px;
     }
-
 `

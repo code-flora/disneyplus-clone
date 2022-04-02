@@ -15,7 +15,6 @@ function Movies() {
                         <img src={movie.thumbnailUrl} alt={movie.name} />
                     </Link>
                 </Wrap>
-
             )
         })
     }

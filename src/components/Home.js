@@ -11,6 +11,7 @@ import { setMovies } from '../features/home/movieSlice'
 function Home() {
     const dispatch = useDispatch();
 
+    //get data from store, saving data in redux
     useEffect(() => {
         async function fetchData() {
             const snapshot = await getDocs(collection(db, "movies"));
@@ -21,7 +22,6 @@ function Home() {
         };
         fetchData();
     }, []);
-
 
     return (
         <Container>

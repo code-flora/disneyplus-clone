@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectHeaderMenu } from '../features/header/menuSlice';
 import { selectUserName, selectUserPhoto, setUserLogin, setUserSignOut } from '../features/user/userSlice';
 import { auth, provider } from '../firebase'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import MediaQuery from 'react-responsive';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
@@ -64,25 +64,23 @@ function Header() {
 
     return (
         <Nav>
-            <Logo src="https://firebasestorage.googleapis.com/v0/b/disney-plus-clone-e2d5c.appspot.com/o/DisneyClone_Assets%2Fgeneral%2Flogo.svg?alt=media&token=f35382de-6475-4e68-bfa1-90690ba9ce23" />
+            <Link to="/" className="logo-link">
+                <Logo src="https://firebasestorage.googleapis.com/v0/b/disney-plus-clone-e2d5c.appspot.com/o/DisneyClone_Assets%2Fgeneral%2Flogo.svg?alt=media&token=f35382de-6475-4e68-bfa1-90690ba9ce23" />
+            </Link>
 
             <MediaQuery minWidth={1000}>
-
                 {!userName ? (
                     <Login onClick={signIn}>Login</Login>) :
                     <>
                         <NavMenu>
                             {menuList}
                         </NavMenu>
-
                         <UserImg src={userPhoto} onClick={signOut} />
                     </>
-
                 }
             </MediaQuery>
 
             <MediaQuery maxWidth={999}>
-
                 {!userName ? (
                     <Login onClick={signIn}>Login</Login>) :
                     <>
@@ -94,15 +92,9 @@ function Header() {
                         {menuOpen ? (<NavToggleMenu >
                             {menuList}
                         </NavToggleMenu>) : ""}
-
-
-
                     </>
-
                 }
-
             </MediaQuery>
-
         </Nav>
     )
 }
@@ -117,6 +109,10 @@ const Nav = styled.nav`
     height: 70px;
     background: #090b13;
     overflow-x: hidden;
+
+    .logo-link{
+        display: flex;
+    }
 `
 
 const Wrapper = styled.div`
@@ -129,7 +125,6 @@ const Logo = styled.img`
 `
 
 const Login = styled.div`
-
     padding: 6px 20px;
     border: 1px solid #fff;
     border-radius: 10px;
@@ -204,7 +199,6 @@ const NavToggleMenu = styled(NavMenu)`
     z-index: 2;
     background-color: rgba(0,0,0,0.7);
     
-
     a{
         margin-bottom: 10px;
     }

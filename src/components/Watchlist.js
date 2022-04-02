@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { doc, getDoc } from 'firebase/firestore';
 import db from '../firebase'
 import { Link } from 'react-router-dom';
-import { auth, provider } from '../firebase'
-import Home from '../components/Home'
+import { auth } from '../firebase'
 import CircularProgress from '@mui/material/CircularProgress';
 
 function Watchlist() {
@@ -42,7 +41,7 @@ function Watchlist() {
         watchlistRender =
             <div>
                 <p>You do not have any movies in your watch list for now.</p>
-                <Link to={<Home />}>Browse Library Now</Link>
+                <Link to="/">Browse Library Now</Link>
             </div>
     }
 
@@ -52,14 +51,13 @@ function Watchlist() {
                 <LoaderWrap>
                     <Loader />
                 </LoaderWrap>
-
                 : (
                     <>
                         <h4>Your watch list</h4>
                         {
                             data.length > 0 &&
                             <Content>
-                                {!isLoading && watchlistRender}
+                                {watchlistRender}
                             </Content>
                         }
                         {

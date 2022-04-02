@@ -21,7 +21,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/watchlist" element={<Watchlist />} />
           <Route path="/" element={<Home />} />
-
         </Routes>
       </Router>
     </div>

@@ -50,7 +50,6 @@ const Content = styled.div`
     max-width: 650px;
     width: 90%;    
     padding: 80px 40px;
-    
 `
 
 const CTALogoOne = styled.img`
